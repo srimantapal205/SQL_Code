@@ -21,3 +21,4 @@ SELECT DISTINCT locality FROM bird.antarctic_populations;
 
 --Second  DISTINCT challange solution 
 SELECT DISTINCT locality, species_id FROM bird.antarctic_populations;
+
