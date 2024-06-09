@@ -51,4 +51,12 @@ SELECT  TOP (1) WITH TIES employee_id as ID, first_name, last_name, salary FROM 
 
 -- NULL
 
+SELECT * FROM oes.products;
 
+SELECT * FROM oes.products WHERE list_price > 100 ORDER BY list_price ASC;
+
+SELECT * FROM oes.orders;
+
+SELECT * FROM oes.orders WHERE shipped_date IS NULL;
+
+SELECT * FROM oes.orders WHERE order_date = '20220226';
