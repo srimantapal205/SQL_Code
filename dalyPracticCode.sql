@@ -52,11 +52,15 @@ SELECT  TOP (1) WITH TIES employee_id as ID, first_name, last_name, salary FROM 
 -- NULL
 
 SELECT * FROM oes.products;
-
+--Challenge1:Select products from theoes.products table which have a price greater than $100.
 SELECT * FROM oes.products WHERE list_price > 100 ORDER BY list_price ASC;
 
 SELECT * FROM oes.orders;
-
+-- Challenge 2 :Select all orders from the oes.orders table which have not yet been shipped.
 SELECT * FROM oes.orders WHERE shipped_date IS NULL;
 
-SELECT * FROM oes.orders WHERE order_date = '20220226';
+--Challenge 3:Select all orders from the oes.orders table which were placed on the 26 th of February 2020.
+SELECT * FROM oes.orders WHERE order_date = '20200226';
+
+-- Challenge 4: Select all orders from the oes.orders table which were placed on or after the 1 st of January 2020.
+SELECT * FROM oes.orders WHERE order_date >= '20200101';
