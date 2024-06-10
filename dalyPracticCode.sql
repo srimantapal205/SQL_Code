@@ -64,3 +64,24 @@ SELECT * FROM oes.orders WHERE order_date = '20200226';
 
 -- Challenge 4: Select all orders from the oes.orders table which were placed on or after the 1 st of January 2020.
 SELECT * FROM oes.orders WHERE order_date >= '20200101';
+
+--Pattern Matching Challenges
+
+--Query the INFORMATION_SCHEMA.COLUMNS view to find the collation used for the table :: 
+SELECT table_schema, table_name, column_name,data_type,collation_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='hcm' AND TABLE_NAME='countries';
+
+SELECT * FROM hcm.countries;
+--Challenge-1: Select countries from the hcm.countries table which  start with the letter ‘N’.
+SELECT * FROM hcm.countries WHERE country_name LIKE 'N%';
+
+SELECT * FROM oes.customers;
+--Challenge- 2: Select customers from the oes.customers table who have a Gmail email address.
+SELECT * FROM oes.customers WHERE email LIKE '%@gmail%';
+
+SELECT * FROM oes.products;
+--Challenge- 3: Select product names from the oes.products table which contain the word ‘mouse’ anywhere within the product name.
+SELECT * FROM oes.products WHERE product_name LIKE '%mouse%';
+--Challenge- 4: Select all product names from the oes.products table which end in a number.
+SELECT * FROM oes.products WHERE product_name LIKE '%[0-9]';
+
+
