@@ -105,3 +105,4 @@ SELECT locality, MAX([date_of_count]) AS  most_recent_population_count FROM bird
 --Challenge-5: What is the date of the most recent population count for each species at each locality in the bird.antarctic_populations table
 
 SELECT species_id, locality, MAX([date_of_count]) AS  most_recent_population_count FROM bird.antarctic_populations GROUP BY species_id,locality;
+
