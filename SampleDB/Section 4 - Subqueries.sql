@@ -1,0 +1,4 @@
+USE SAMPLEDB
+GO
+
+SELECT * FROM hcm.employees;
