@@ -97,4 +97,26 @@ Return the following product details for the cheapest product(s) in the oes.prod
 -category_id
 */
 SELECT * FROM oes.products;
-SELECT p.product_id, p.product_name, p.list_price, p.category_id FROM oes.products p WHERE p.list_price = (SELECT MIN(mp.list_price) FROM oes.products mp)
+SELECT p.product_id, p.product_name, p.list_price, p.category_id FROM oes.products p WHERE p.list_price = (SELECT MIN(mp.list_price) FROM oes.products mp);
+
+/*
+Challenge-2:
+Use a correlated subquery to return the following product details for the cheapest product(s) in each product category as given by the category_id column:
+-product_id
+-product_name
+-list_price
+-category_id
+*/
+
+SELECT 
+	p.product_id, 
+	p.product_name, 
+	p.list_price, 
+	p.category_id 
+FROM oes.products p 
+WHERE p.list_price = (
+	SELECT MIN(mp.list_price) 
+	FROM oes.products mp
+	WHERE mp.category_id = p.category_id
+	)
+ORDER BY p.category_id, p.product_id;
