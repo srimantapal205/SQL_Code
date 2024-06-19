@@ -119,7 +119,7 @@ WHERE p.list_price = (
 	FROM oes.products mp
 	WHERE mp.category_id = p.category_id
 	)
-ORDER BY p.category_id, p.product_id;
+
 
 /*
 Challenge-3:
@@ -157,22 +157,39 @@ ORDER BY p.category_id,p.product_id;
 Challenge-5:
 Repeat challenge 4, except this time include the product category name as given in the oes.product_categories table.
 */
-
+WITH MinPrice
+AS(
+	SELECT category_id, MIN(list_price) as min_list_price FROM oes.products GROUP BY category_id
+)
+SELECT	
+	p.product_id, 
+	p.product_name, 
+	p.list_price, 
+	p.category_id,
+	pc.category_name
+FROM oes.products p 
+INNER JOIN MinPrice mp ON p.category_id = mp.category_id AND p.list_price = mp.min_list_price
+INNER JOIN oes.product_categories pc ON p.category_id = pc.category_id
+ORDER BY p.category_id,p.product_id;
 
 /*
 Background: The employee_id column in the oes.orders table gives the employee_id of the salesperson who made the sale.
 Challenge-6: 
+
 Use the NOT IN operator to return all employees who have never been the salesperson for any customer order. Include the following columns from hcm.employees
 -employee_id
 -first_name
 -last_name
 */
 
+SELECT * FROM hcm.employees;
+SELECT order_id, employee_id FROM oes.orders;
+SELECT e.employee_id,e.first_name,e.last_name FROM hcm.employees e WHERE e.employee_id NOT IN(SELECT employee_id FROM oes.orders WHERE employee_id IS NOT NULL)
 /*
 Challenge-7:
 Return the same result as challenge 6, except use WHERE NOT EXISTS.
 */
-
+SELECT e.employee_id,e.first_name,e.last_name FROM hcm.employees e WHERE NOT EXISTS (SELECT * FROM oes.orders o WHERE o.employee_id =  e.employee_id)
 /*
 Challenge - 8:
 Return unique customers who have ordered the 'PBX Smart Watch 4’.
@@ -182,4 +199,22 @@ Include:
 -last_name
 -email
 */
+SELECT * FROM oes.orders;
+SELECT * FROM oes.customers;
+SELECT * FROM oes.products WHERE product_name ='PBX Smart Watch 4'; 
 
+SELECT
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	c.email
+FROM oes.customers c
+WHERE c.customer_id IN(
+	SELECT o.customer_id FROM oes.orders o 
+	JOIN oes.order_items oi
+	ON oi.order_id = o.order_id
+	JOIN oes.products p
+	ON p.product_id = oi.product_id
+	WHERE product_name  ='PBX Smart Watch 4'
+
+	)
