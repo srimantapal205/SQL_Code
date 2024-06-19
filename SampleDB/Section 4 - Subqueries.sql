@@ -120,3 +120,66 @@ WHERE p.list_price = (
 	WHERE mp.category_id = p.category_id
 	)
 ORDER BY p.category_id, p.product_id;
+
+/*
+Challenge-3:
+Return the same result as challenge 2 i.e. the cheapest product(s) in each product category except this time by using an inner join to a derived table.
+*/
+
+SELECT 
+	p.product_id, 
+	p.product_name, 
+	p.list_price, 
+	p.category_id 
+FROM oes.products p 
+INNER JOIN 
+	(SELECT category_id, MIN(list_price) as min_cat_price FROM oes.products GROUP BY category_id) p2 
+	ON p.category_id = p2.category_id AND p.list_price = p2.min_cat_price; 
+
+/*
+Challenge-4:
+Return the same result as challenge 2 and 3 i.e. the cheapest product(s) in each product category except thistime by using a common table expression.
+*/
+WITH MinPrice
+AS(
+	SELECT category_id, MIN(list_price) as min_list_price FROM oes.products GROUP BY category_id
+)
+SELECT	
+	p.product_id, 
+	p.product_name, 
+	p.list_price, 
+	p.category_id 
+FROM oes.products p 
+INNER JOIN MinPrice mp ON p.category_id = mp.category_id AND p.list_price = mp.min_list_price
+ORDER BY p.category_id,p.product_id;
+
+/*
+Challenge-5:
+Repeat challenge 4, except this time include the product category name as given in the oes.product_categories table.
+*/
+
+
+/*
+Background: The employee_id column in the oes.orders table gives the employee_id of the salesperson who made the sale.
+Challenge-6: 
+Use the NOT IN operator to return all employees who have never been the salesperson for any customer order. Include the following columns from hcm.employees
+-employee_id
+-first_name
+-last_name
+*/
+
+/*
+Challenge-7:
+Return the same result as challenge 6, except use WHERE NOT EXISTS.
+*/
+
+/*
+Challenge - 8:
+Return unique customers who have ordered the 'PBX Smart Watch 4’.
+Include:
+-customer_id
+-first_name
+-last_name
+-email
+*/
+
