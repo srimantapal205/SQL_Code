@@ -45,5 +45,22 @@ SELECT customer_id, customer_name. CHARINDEX('', customer_name) + 1 AS start_pos
 */
 
 /*
+DATE andTIME Function
 
 */
+
+SELECT GETDATE() AS get_date_value;
+
+SELECT GETDATE() AS get_date_value, CURRENT_TIMESTAMP AS current_timestamp_value
+
+SELECT SYSDATETIME() AS systemdatetime;
+
+SELECT CAST(SYSDATETIME() AS DATE) AS systemdate_value
+
+--CAST function syntax :: CAST(Expression as data_type)
+
+SELECT CAST(SYSDATETIME() AS time) AS sysdatetimevalue;
+
+--UTC date and time functions::
+SELECT GETUTCDATE() AS getutcdate_value, SYSDATETIME() AS sysutcdatetime_value;
+
