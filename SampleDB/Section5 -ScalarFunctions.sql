@@ -23,3 +23,27 @@ CHARINDEX(' ', customer_name) AS index_position_of space FROM customers
 
 
 */
+
+/*
+String Manipulation
+CHARINDEX function syntax::
+CHARINDEX(substring, string, [string_position])
+
+LEFT Function syntax::
+LEFT(STRING, number_of_characters)
+
+SUBSTRING function Syntax::
+SUBSTRING(string, start_position,length)
+
+SELECT customer_id, customer _name, CHARINDEX('', customer_name) AS index_position_of_space FROM customers;
+SELECT customer_id, customer _name, LEFT( customer_name, 2 ) AS index_position_of_space FROM customers;
+SELECT customer_id, customer _name, LEFT( customer_name, CHARINDEX('', customer_name) -1 ) AS first_name FROM customers;
+
+SELECT customer-ID, CUSTOMER_NAME, substring(customer_name, CHARINDEX('', customer_name)+1, LEN(customer_name)) AS last_name FROM customers;
+
+SELECT customer_id, customer_name. CHARINDEX('', customer_name) + 1 AS start_position, LEN(customer_name) AS string_length, SUBSTRING(customer_name, CHARINDEX('', customer)+1, LEN(customer_name)) AS last_name FROM customers;
+*/
+
+/*
+
+*/
