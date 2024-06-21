@@ -45,7 +45,7 @@ SELECT customer_id, customer_name. CHARINDEX('', customer_name) + 1 AS start_pos
 */
 
 /*
-DATE andTIME Function
+DATE and TIME Function
 
 */
 
