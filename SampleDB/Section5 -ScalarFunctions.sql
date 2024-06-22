@@ -59,8 +59,90 @@ SELECT CAST(SYSDATETIME() AS DATE) AS systemdate_value
 
 --CAST function syntax :: CAST(Expression as data_type)
 
-SELECT CAST(SYSDATETIME() AS time) AS sysdatetimevalue;
+SELECT CAST(SYSDATETIME() AS TIME) AS sysdatetimevalue;
 
 --UTC date and time functions::
 SELECT GETUTCDATE() AS getutcdate_value, SYSDATETIME() AS sysutcdatetime_value;
 
+--Selecting some column from the hcm.employees table
+
+SELECT employee_id, first_name, last_name, birth_date, hire_date FROM hcm.employees;
+
+--The DATEPART function return an integer representing the specified datepart of the specified date::
+SELECT 
+	employee_id, 
+	first_name, 
+	last_name, 
+	birth_date, 
+	hire_date, 
+	DATEPART(YEAR, hire_date) AS hire_year, 
+	DATEPART(MONTH, hire_date) AS hire_month, 
+	DATEPART(DAY, hire_date) AS hire_day
+
+FROM hcm.employees;
+
+SELECT 
+	employee_id, 
+	first_name, 
+	last_name, 
+	birth_date, 
+	hire_date, 
+	DATENAME(YEAR, hire_date) AS hire_year, 
+	DATENAME(MONTH, hire_date) AS hire_month, 
+	DATENAME(DAY, hire_date) AS hire_day
+
+FROM hcm.employees;
+
+--Count of employees hired each year
+SELECT
+	DATEPART(YEAR, hire_date) AS hire_year,
+	COUNT(*) AS hire_count
+FROM hcm.employees
+GROUP BY  DATEPART(YEAR, hire_date);
+
+--Count of the employee hired in each year using Year function
+SELECT 
+	YEAR(hire_date) AS hire_year,
+	COUNT(*) AS hire_count
+FROM hcm.employees
+GROUP BY YEAR(hire_date);
+
+--DATE ADD function ysntax:: DATEADD(inteval, number, date_expression)
+--Use DATEADD to add 5 years to the hire_date to know when each employees 5 years anniversary is::
+SELECT 
+	employee_id,
+	first_name,
+	last_name,
+	birth_date,
+	hire_date,
+	DATEADD(YEAR, 5, hire_date) AS five_years_date
+FROM hcm.employees;
+
+--Use the DATEDIFF function to calculate how many days each employee has worked at the company 
+
+SELECT
+	employee_id,
+	first_name,
+	last_name,
+	birth_date,
+	hire_date,
+	DATEDIFF(YEAR, hire_date, CURRENT_TIMESTAMP) AS years_employee,
+	DATEDIFF(MONTH, hire_date, CURRENT_TIMESTAMP) AS months_employee,
+	--DATEDIFF(DAYOFYEAR, hire_date, CURRENT_TIMESTAMP) AS dayofyear_employee,
+	DATEDIFF(WEEK, hire_date, CURRENT_TIMESTAMP) AS weeks_employee,
+	DATEDIFF(DAY, hire_date, CURRENT_TIMESTAMP) AS days_employee
+FROM hcm.employees;
+
+/*
+Some possible time intervals we can use in the first argument of the DATEADD and DATEDIFF functions:
+year
+month
+dayofyear
+day
+week
+weekday
+hour
+minute
+second
+millisecond
+*/
