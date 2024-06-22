@@ -146,3 +146,57 @@ minute
 second
 millisecond
 */
+
+/*
+Challenge-1:
+Concatenate the first name and last name of each employee. Include a single space between the first and last name. Name the new expression employee_name .
+-employee_id
+-first_name
+-last_name
+-employee_name
+*/
+
+/*
+Challenge-2:
+Concatenate the first name, middle name, and last name of each employee. Include a single space between each of the names. Name the new expression employee_name .
+-employee_id
+-first_name
+-last_name
+-employee_name
+*/
+
+
+/*
+Challenge-3:
+Extract the genus name from the scientific_name as given in the bird.antarctic_species table.
+*/
+
+/*
+Challenge-4:
+Extract the species name from the scientific_name as given in the bird.antarctic_species table.
+*/
+
+/*
+Challenge-5:
+Return the age in years for all employees. Name this expression as employee_age .
+-employee_id
+-first_name
+-last_name
+-birth_date
+-employee_age
+*/
+
+/*
+Challenge-6:
+Assuming an estimated shipping date of 7 days after the order date, add a column expression called estimated_shipping_date for all unshipped orders. Include:
+-order_id
+-order_date
+-estimated_shipping_date
+*/
+
+/*
+Challenge-7:
+Calculate the average number of days it takes each shipping company to ship an order. Call this expression avg_shipping_days .
+-company_name
+-avg_shipping_days
+*/
