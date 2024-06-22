@@ -250,4 +250,60 @@ INNER JOIN  oes.shippers s
 ON o.shipper_id = s.shipper_id
 GROUP BY s.company_name;
 
+/*
+The Case Expression
+InSQL the Case expression has the functionlity of an IF-THEN-ELSE statement.
+Often people will refer to SQL statement that includes a case expression as CASE statement.
+Example::
 
+SELECT customer_id first_name, country, club member FROM customers
+TASK:: Add an expression to the query called 'customer_status'. If the customer is the USA and is a club member give a value of domestic member for the expression. If from USA and is not a club member then 'Domestic  non_member'.
+
+If a customer is from the USA but is a club member then their customer status is 'Foreign member'. 
+If not from the USA and is not a club member then ''Foregn non-member.
+
+SELECT
+	customer_id, first_name, country,club_member,
+	CASE 
+		EHEN country = 'USA' AND club_member ='Yes' THEN 'Domestic  member'
+		EHEN country = 'USA' AND club_member ='No' THEN 'Domestic  non_member'
+		EHEN country <> 'USA' AND club_member ='Yes' THEN 'Foreign  member'
+		EHEN country <> 'USA' AND club_member ='No' THEN 'Foreign  non_member'
+		ELSE 'unknown'
+		END AS customer_status
+FROM customers.
+*/
+
+/*
+Challenge-1:
+Select the following columns from theoes.products table:
+•product_id
+•product_name
+•discontinued
+Include a CASE expression in the SELECT statement called discontinued_description . Give this expression the string ‘No’ when the discontinued column equals 0 and a string of ‘Yes’ when the discontinued column equals 1. In all other cases give the expression the string of ‘unknown’.
+*/
+
+/*Challenge-2:
+Select the following columns from theoes.products table:
+•product_id
+•product_name
+•list_price
+•Include a CASE expression in the SELECT statement called price_grade . For this expression..
+•If list_price is less than 50 then give the string ‘Low’.
+•If list_price is greater than or equal to 50 and list_price is less than 250 then give the string ‘Medium’.
+•If list_price is greater than or equal to 250 then give the string ‘High’.
+•In all other cases, give the expression the string of ‘unknown’.*/
+
+
+/*Challenge-3:
+•Select the following columns from the oes.orders table:
+•order_id
+•order_date
+•shipped_date
+•Include a CASE expression called shipping_status which determines the difference in days between the order_date and the shipped_date . When this difference is less than or equal to 7 then give the string value ‘Shipped within one week’.
+•If the difference is greater than 7 days, then give the string ‘Shipped over a week later’.
+•If shipped_date is null then give the string ‘Not yet shipped’.*/
+
+
+/*Challenge-4:
+Repeat the third challenge to derive the shipping_status expression, but this time get the count of orders by the shipping_status expression..*/
