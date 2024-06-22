@@ -265,10 +265,10 @@ If not from the USA and is not a club member then ''Foregn non-member.
 SELECT
 	customer_id, first_name, country,club_member,
 	CASE 
-		EHEN country = 'USA' AND club_member ='Yes' THEN 'Domestic  member'
-		EHEN country = 'USA' AND club_member ='No' THEN 'Domestic  non_member'
-		EHEN country <> 'USA' AND club_member ='Yes' THEN 'Foreign  member'
-		EHEN country <> 'USA' AND club_member ='No' THEN 'Foreign  non_member'
+		WHEN country = 'USA' AND club_member ='Yes' THEN 'Domestic  member'
+		WHEN country = 'USA' AND club_member ='No' THEN 'Domestic  non_member'
+		WHEN country <> 'USA' AND club_member ='Yes' THEN 'Foreign  member'
+		WHEN country <> 'USA' AND club_member ='No' THEN 'Foreign  non_member'
 		ELSE 'unknown'
 		END AS customer_status
 FROM customers.
@@ -276,15 +276,25 @@ FROM customers.
 
 /*
 Challenge-1:
-Select the following columns from theoes.products table:
+Select the following columns from the oes.products table:
 •product_id
 •product_name
 •discontinued
 Include a CASE expression in the SELECT statement called discontinued_description . Give this expression the string ‘No’ when the discontinued column equals 0 and a string of ‘Yes’ when the discontinued column equals 1. In all other cases give the expression the string of ‘unknown’.
 */
+SELECT 
+	product_id, product_name, discontinued,
+	CASE
+		WHEN discontinued = 0 THEN 'NO'
+		WHEN discontinued = 1 THEN 'YES'
+		ELSE 'unknown'
+		END AS 'discontinued_description'		
+FROM oes.products;
+
+
 
 /*Challenge-2:
-Select the following columns from theoes.products table:
+Select the following columns from the oes.products table:
 •product_id
 •product_name
 •list_price
@@ -292,8 +302,20 @@ Select the following columns from theoes.products table:
 •If list_price is less than 50 then give the string ‘Low’.
 •If list_price is greater than or equal to 50 and list_price is less than 250 then give the string ‘Medium’.
 •If list_price is greater than or equal to 250 then give the string ‘High’.
-•In all other cases, give the expression the string of ‘unknown’.*/
+•In all other cases, give the expression the string of ‘unknown’.
+*/
 
+SELECT
+	product_id,
+	product_name,
+	list_price,
+	CASE
+		WHEN list_price < 50 THEN 'Low'
+		WHEN list_price >= 50 AND list_price < 250 THEN 'Medium'
+		WHEN list_price >= 250 THEN 'High'
+		ELSE 'unknown'
+		END AS price_grade
+FROM oes.products
 
 /*Challenge-3:
 •Select the following columns from the oes.orders table:
@@ -304,6 +326,30 @@ Select the following columns from theoes.products table:
 •If the difference is greater than 7 days, then give the string ‘Shipped over a week later’.
 •If shipped_date is null then give the string ‘Not yet shipped’.*/
 
+SELECT
+	order_id, order_date, shipped_date,
+	DATEDIFF(DAY, order_date, shipped_date) AS shipped_days,
+	CASE
+		WHEN DATEDIFF(DAY, order_date, shipped_date) <= 7 THEN 'Shipped within one week'
+		WHEN DATEDIFF(DAY, order_date, shipped_date) > 7 THEN 'Shipped over a week later'
+		ELSE 'Not yet shipped'
+		END AS shipping_status
+	FROM oes.orders;
+	--WHERE shipped_date IS NULL
+
 
 /*Challenge-4:
 Repeat the third challenge to derive the shipping_status expression, but this time get the count of orders by the shipping_status expression..*/
+
+SELECT
+	s.shipping_status,
+	count(*) AS order_Count_by_status
+	FROM(
+	SELECT CASE
+		WHEN DATEDIFF(DAY, order_date, shipped_date) <= 7 THEN 'Shipped within one week'
+		WHEN DATEDIFF(DAY, order_date, shipped_date) > 7 THEN 'Shipped over a week later'
+		ELSE 'Not yet shipped'
+		END AS shipping_status
+	FROM oes.orders
+	) s
+GROUP BY s.shipping_status;
