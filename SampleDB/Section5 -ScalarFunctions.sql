@@ -155,6 +155,20 @@ Concatenate the first name and last name of each employee. Include a single spac
 -last_name
 -employee_name
 */
+SELECT
+	employee_id,
+	first_name,
+	last_name,
+	first_name+ ' '+last_name AS employee_name
+FROM hcm.employees;
+
+--OR
+SELECT
+	employee_id,
+	first_name,
+	last_name,
+	CONCAT(first_name, ' '+last_name) AS employee_name
+FROM hcm.employees;
 
 /*
 Challenge-2:
@@ -162,20 +176,33 @@ Concatenate the first name, middle name, and last name of each employee. Include
 -employee_id
 -first_name
 -last_name
+-middle_name
 -employee_name
 */
-
+SELECT
+	employee_id,
+	first_name,
+	middle_name,
+	last_name,
+	CONCAT(first_name, ' '+middle_name,' '+last_name) AS employee_name
+FROM hcm.employees;
 
 /*
 Challenge-3:
-Extract the genus name from the scientific_name as given in the bird.antarctic_species table.
+Extract the genus name from the scientific_name as given in the bird.antarctic_species table. (Display the first word)
 */
-
+SELECT * FROM bird.antarctic_species;
+SELECT 
+	scientific_name,
+	LEFT(scientific_name, CHARINDEX(' ',scientific_name)-1) AS genus_name FROM  bird.antarctic_species;
 /*
 Challenge-4:
-Extract the species name from the scientific_name as given in the bird.antarctic_species table.
+Extract the species name from the scientific_name as given in the bird.antarctic_species table. (Display the Second word)
 */
-
+SELECT 
+	scientific_name,
+	SUBSTRING(scientific_name, CHARINDEX(' ', scientific_name)+1, LEN(scientific_name)) AS species_name 
+FROM bird.antarctic_species;
 /*
 Challenge-5:
 Return the age in years for all employees. Name this expression as employee_age .
@@ -185,7 +212,13 @@ Return the age in years for all employees. Name this expression as employee_age 
 -birth_date
 -employee_age
 */
-
+SELECT 
+	employee_id,
+	first_name,
+	last_name,
+	birth_date,
+	DATEDIFF(YEAR, birth_date, CURRENT_TIMESTAMP) AS employee_age 
+FROM hcm.employees;
 /*
 Challenge-6:
 Assuming an estimated shipping date of 7 days after the order date, add a column expression called estimated_shipping_date for all unshipped orders. Include:
@@ -193,6 +226,13 @@ Assuming an estimated shipping date of 7 days after the order date, add a column
 -order_date
 -estimated_shipping_date
 */
+SELECT * FROM oes.orders WHERE shipped_date IS NULL;
+SELECT
+	order_id,
+	order_date,
+	DATEADD(DAY,7, order_date)AS estimated_shipping_date
+FROM oes.orders
+WHERE shipped_date IS NULL;
 
 /*
 Challenge-7:
@@ -200,3 +240,14 @@ Calculate the average number of days it takes each shipping company to ship an o
 -company_name
 -avg_shipping_days
 */
+SELECT * FROM oes.shippers
+
+SELECT  
+	s.company_name,
+	AVG(DATEDIFF(DAY, o.order_date, o.shipped_date)) AS avg_shipping_days
+FROM oes.orders o
+INNER JOIN  oes.shippers s
+ON o.shipper_id = s.shipper_id
+GROUP BY s.company_name;
+
+
