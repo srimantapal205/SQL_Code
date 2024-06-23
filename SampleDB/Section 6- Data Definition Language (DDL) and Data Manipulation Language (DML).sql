@@ -39,8 +39,38 @@ The DECIMAL data type is the same as the NUMERIC data.
 /*
 FLOAT data type.
 
+THE FLOAT data type is an approximate -number data type . As a result not all values in the data type be represented exactly.
 
+flow_measurement FLOAT
 
+FLOAT(n) where n is the number of that are used to store the float number. the default is 53 bits.
 
+In most situation it is better to use the DECIMAL data type insted of FLOAT.
+Nnver use the FLOAT data type to store Monetry values.
+*/
+
+/*
+Declearing a varible called @val odf decimal(12,2) data type and giving it a value of 0.0 using a while loop to add 0.1 to val which continue intersting while val does not equal 10.0.
+*/
+DECLARE @val DECIMAL(12, 2) = 0.0
+
+WHILE @val !=10.0
+BEGIN
+	PRINT @val;
+	SET @val += 0.1;
+END
+--If we try same thing but  giv @val a data type of float than the loop doesn't stop:
+DECLARE @val FLOAT(24 ) = 0.0;
+
+WHILE @val !=10
+BEGIN
+	PRINT @val;
+	SET @val += 0.1;
+END
+/*
+When  using float data type the value 10 can be stored accurectly. How ever the  value 0.1 cannot be accuratly represented in float . There fore , event though we had the WHILE condition @val !=10.0 the @val will never exactly equal 10 when we use the FLOAT data type. this means that the loop will keep interating - by adding 0.1 - indefinitely.
+
+However, if we look in the message tab we can see that it does show that at one point there was a value of 10. but  this is just SQL server management Studion is rounding the values that are printed. In other word , SSMS is not showing us the actual values.
 
 */
+
