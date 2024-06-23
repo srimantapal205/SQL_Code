@@ -212,7 +212,15 @@ columns:
 Give the IDENTITY property to the dept_id column. Also, put a primary key constraint on the dept_id column. Put a NOT NULL constraint on the dept_name column.
 */
 
+CREATE TABLE dept 
+	(
+		dept_id INT IDENTITY,
+		dept_name VARCHAR(50) NOT NULL,
+		CONSTRAINT pk_dept_dept_id PRIMARY KEY (dept_id)
+	)
+SELECT * FROM dbo.dept;
 /*
+Challenge-2:
 Write an insert statement to insert the following row into the dbo.dept table:
 
 property.
@@ -221,14 +229,19 @@ dept_name
 1
 Business Intelligence
 */
-
+INSERT INTO dbo.dept(dept_name) 
+	VALUES('Business Intelligence');
 /*
-Challenge:
+Challenge-3:
 Populate the dbo.dept table with more rows: Insert all department names from the hcm.departments table.
 */
+INSERT INTO dbo.dept(dept_name)
+SELECT department_name 
+FROM hcm.departments;
+
 
 /*
-Challenge:
+Challenge-4:
 Create a table called a emp in the dbo schema. Specify the following columns:
 -emp_id INT
 -first_name VARCHAR(50)
@@ -244,10 +257,21 @@ fk_name FOREIGN KEY ( child_col )
 REFERENCES
 parent_table parent_col
 */
+CREATE TABLE emp
+	(
+		emp_id INT IDENTITY,
+		first_name VARCHAR(50),
+		last_name VARCHAR(50),
+		hire_date DATE NOT NULL,
+		dept_id INT	NOT NULL,
+		CONSTRAINT PK_emp_emp_id PRIMARY KEY (emp_id),
+		CONSTRAINT FK_emp_dept_id FOREIGN KEY(dept_id) REFERENCES  dept(dept_id)
+	);
+SELECT * FROM dbo.emp;
 
 /*
 
-Challenge:
+Challenge-5:
 Populate the dbo.emp table with the following two employees:
 Hints:
 You do not need to specify emp_id in the insert statement as it has the identity property. For the hire_date column use the standard format ‘YYYYMMDD’ in digits.
@@ -259,3 +283,6 @@ dept_id
 1 Scott Davis Dec-11 2020 1
 2 Miriam Yardley Dec-05 2020 1
 */
+INSERT INTO dbo.emp(first_name,last_name,hire_date,dept_id)
+	VALUES	('Scott', 'Davis', '20201211', 1),
+			('Miriam', 'Yardley', '20201205', 1)
