@@ -159,3 +159,12 @@ CREATE TABLE dbo.park_visits
 	);
 
 SELECT * FROM dbo.park_visits;
+
+INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
+	VALUES(2, '20200109', 'Bill', 'Evans');
+INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
+	VALUES(1, '20201122', 'Jane', 'Dillon');
+INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
+	VALUES(1, '20200623', 'Mike', 'Cruz');
+INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
+	VALUES(3, '20200520', 'Irene', 'Pritchard');
