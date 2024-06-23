@@ -168,3 +168,94 @@ INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
 	VALUES(1, '20200623', 'Mike', 'Cruz');
 INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
 	VALUES(3, '20200520', 'Irene', 'Pritchard');
+
+/*
+INSERT STATEMENT
+SYNTAX ::
+INSERT IN TO table_name(Column1, column2, ....)
+	VALUES(Col1_value, col2_value, ....)
+
+EXAMPLE:: INSERT INTO dbo.park_visits (park_id, visit_date, first_name, last_name)
+	VALUES(3, '20200520', 'Irene', 'Pritchard');
+
+Multi-row INSERT statement:
+INSERT INTO dbo.parks1 (park_id, park_name,entry_fee)
+	VALUES	(1, 'Bellmont Park', 5),
+			(2, 'Redmond Park', 10),
+			(3, 'Highland Mountains', 5.74)
+
+
+INSERT INTO ... SELECT statement
+
+We can use the INSER INTO ... SELECT statement to insert data that comes from another table(s).
+
+INSERT INTO table_name (column1, column2)
+SELECT column1, column2
+FROM table2_name;
+
+Example:: 
+INSERT INTO dbo.dept(dept_name,loc_id)
+SELECT department_name, location_id
+FROM hcm.departments
+WHERE department_name= 'IT';
+
+*/
+
+
+/*
+Challenge-1:
+Create a table called dept in the dbo schema. Specify the following
+columns:
+-dept_id INT
+-dept_name VARCHAR(50)
+
+Give the IDENTITY property to the dept_id column. Also, put a primary key constraint on the dept_id column. Put a NOT NULL constraint on the dept_name column.
+*/
+
+/*
+Write an insert statement to insert the following row into the dbo.dept table:
+
+property.
+dept_id
+dept_name
+1
+Business Intelligence
+*/
+
+/*
+Challenge:
+Populate the dbo.dept table with more rows: Insert all department names from the hcm.departments table.
+*/
+
+/*
+Challenge:
+Create a table called a emp in the dbo schema. Specify the following columns:
+-emp_id INT
+-first_name VARCHAR(50)
+-last_name VARCHAR(50)
+-hire_date DATE
+-dept_id INT
+Give the
+IDENTITY property to the emp_id column. Also, put a primary key constraint on the emp_id column. Put NOT NULL constraints on any columns you think need them. Put a foreign key constraint on the dept_id column which references back to the dept_id column from the dbo.dept table.
+Hints: 
+Syntax for a foreign key:
+CONSTRAINT
+fk_name FOREIGN KEY ( child_col )
+REFERENCES
+parent_table parent_col
+*/
+
+/*
+
+Challenge:
+Populate the dbo.emp table with the following two employees:
+Hints:
+You do not need to specify emp_id in the insert statement as it has the identity property. For the hire_date column use the standard format ‘YYYYMMDD’ in digits.
+emp_id
+first_name
+last_name
+hire_date
+dept_id
+1 Scott Davis Dec-11 2020 1
+2 Miriam Yardley Dec-05 2020 1
+*/
