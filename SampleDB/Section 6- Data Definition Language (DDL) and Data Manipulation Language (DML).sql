@@ -395,3 +395,28 @@ UPDATE dbo.emp
 	SET last_name = 'Greenbank' 
 WHERE emp_id = 2
 
+
+/*
+DELETE Statement:
+
+The DELETE statement is used to delete rows from a table.
+
+Syntax::
+DELETE FROM table_name
+WHERE <Conditions>
+
+Example::
+DELETE from dbo.products WHERE product_name =  'Sports hat';
+
+This statement will delete rows from the products table which have a product name of 'Sports hat'.
+
+DELETE FROM dbo.product;
+
+This statement will delete all row from the products table.
+
+Npte:: Anothr way to delete all the row in a table is use a TRUNCATE TABLE statement.
+*/
+
+DELETE FROM dbo.emp
+WHERE emp_id = 1;
+
