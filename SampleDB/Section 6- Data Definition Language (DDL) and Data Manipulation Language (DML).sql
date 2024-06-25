@@ -487,3 +487,32 @@ GO
 
 --Older version of SQL Server can use the following equivalent methods::
 IF OBJECT_ID (N'SAMPLEDB.dbo.dept', N'U') IS NOT NULL DROP TABLE dbo.dept;
+
+
+/*
+Transaction Statement::
+A transaction is single unit of work some times made multiple operation.
+
+Sor example a transaction could consist of one or more SQL statements which change data in table
+
+In order to maintain consistency in database, a transaction should have four properties as given bty the ACID acronym::
+	Aromic
+	Consistency
+	Isolation
+	Durability
+ACID property -- Atomic::
+A tranction should be Automic.
+This means that eithe all the statements within the transaction are successfully saved or none of them are saved you do not want some statements to succeed and some thar fail. Instead, it should be all or nothing.
+
+Note:: When a change is saved to the database we say that it hasbeen commited to database.
+
+
+ACID property -- Consistency::
+A tranction should be consistent. This means that a tranction should remove the database from one constent state to another. ALL data remains vali accroding  to defined such as constraints.
+
+ACID property -- Isolation::
+A transaction should be isolated. This means that each transaction occurs in isolation.  In other words, no tranction will be affected then multiple tranction can occur independently of other without interference.
+
+ACID property -- Durability::
+A transaction shoul be durable. This means that the changes made by a successful transction means are committed to the database and will persist even if ans a system failure event occurs e.g, if a power failure event e.g., if a power failure event ware to occur.
+*/
