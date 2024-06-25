@@ -451,8 +451,39 @@ SUMMARY::
 If we need to delete all the rows in table then it generally recommended to to use the TRUNCATE TABLE statement. the main reson is that TRUNCATE TABLE is faster.
 
 IN SQL Server,  both DELETE and TRUNCATE TABLE statement canbe be rolled back if they are within a transaction.
+*/
+/*
+The DROP table statement::
+The DROP TABLE statement can be used to completely remove a table from the database.
+Syntax::
+DROP TABLE database_name.schema_name.table_name;
 
+Example:
+DROP TABLE MYDB.dbo.products;
 
+Note::
+When a table is dropped then all associated indexes and constraints on that table are also dropped.
 
 
 */
+DROP  TABLE SAMPLEDB.dbo.dept;
+GO
+
+SELECT * FROM dbo.dept
+/*
+We need to either drop the child table first i.e. dbo.emp or drop the froeign key constraint on the child table that is referencing the parent table dbo.dept.
+*/
+
+ALTER TABLE dbo.emp DROP CONSTRAINT [FK_emp_dept_id] ;
+GO
+--IF we try and drop a table that no longer exits then we get an error message:
+DROP  TABLE SAMPLEDB.dbo.dept; --Cannot drop the table 'SAMPLEDB.dbo.dept', because it does not exist or you do not have permission.
+GO
+
+-- TO avoide this we can use IF EXITS to only drop a table if it currently xits.
+--Note that the IF EXITS option is only available FROM SQL SERVER 2016 onwords:: 
+DROP TABLE IF EXISTS dbo.dept;
+GO
+
+--Older version of SQL Server can use the following equivalent methods::
+IF OBJECT_ID (N'SAMPLEDB.dbo.dept', N'U') IS NOT NULL DROP TABLE dbo.dept;
