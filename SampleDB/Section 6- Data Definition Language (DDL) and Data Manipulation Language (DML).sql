@@ -420,3 +420,39 @@ Npte:: Anothr way to delete all the row in a table is use a TRUNCATE TABLE state
 DELETE FROM dbo.emp
 WHERE emp_id = 1;
 
+/*
+TRUNCATE Table statement
+The TRUNCATE TABLE statement can be used to be delete all rows in table.
+
+Syntax::
+TRUNCATE TABLE table_name;
+
+Example: TRUNCATE TABLE dbo.products;
+
+Diffrence  Between DELETE and TRUNCATE table
+
+DELETE FROM table_name:
+
+In DELETE statement we can specify an optional WHERE clause so that only a subset of row are deleted.
+DELETE record entries into the tranction log for each row that is deleted.
+DELETE doesnot reset a column which has the IDENTITY property.
+DELETE can be used on table that is referanced by a foreign key provided that there are no related rows in the child.
+
+
+TRUNCT TABLE table_name::
+TRUNCATE TABLE does not support a WHERE clause. Therefor, it will delete all rows in table.
+
+TRUNCATE TABLE will reset a column which has the IDENTITY property back to seed value 
+
+TRUNCATE TABLE cannot be used on a table that is referanced by a forigen key in another table.
+
+
+SUMMARY::
+If we need to delete all the rows in table then it generally recommended to to use the TRUNCATE TABLE statement. the main reson is that TRUNCATE TABLE is faster.
+
+IN SQL Server,  both DELETE and TRUNCATE TABLE statement canbe be rolled back if they are within a transaction.
+
+
+
+
+*/
