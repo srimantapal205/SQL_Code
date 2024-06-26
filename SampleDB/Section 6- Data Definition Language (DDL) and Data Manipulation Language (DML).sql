@@ -554,3 +554,100 @@ COMMIT TRANSACTION;
 
 */
 
+/*
+Stored Procedures::
+
+A store procedure is simply some SQL code that is saved in datbase which can be executed.
+When a stored procedure is executed the SQL statements contained within the procedure are executed.
+Often stored procedures will contain a batch of SQL statement which are treated as a logical unit.
+A stored procedure can be defined to accept input and output parameters.
+
+Benifits of Store Procedures::
+Stored procedures support workflows consisting of multiple steps.
+They can be sued to modify table data as well as alter, drop, or create database object.
+They can hide complex logic from users. All a user needs to do is provide some parameter values and execute the stored procedure.
+The application can execute (call) a stored procedure instead of implementing that same logic in the application itself.
+
+SYNTAX:::
+
+CREATE PROCEDURE procedure_name
+	(
+		@parameter1 data_type, @parameter2 data_type
+	) AS
+	sql_statement ...
+	;
+
+CREATE PROCEDURE procedure_name
+	(
+		@parameter1 data_type, @parameter2 data_type
+	) 
+	AS
+	BEGIN
+	sql_statement ...
+	
+	END;
+
+CREATE PROCEDURE procedure_name
+	(
+		@parameter1 data_type, @parameter2 data_type
+	) 
+	AS
+	BEGIN TRANSACTION;
+	sql_statement ...
+	
+	COMMIT TRANSACTION;
+
+
+Executing a Stored Procedure
+EXECUTE procedure_name 
+	@parameter1 = parame1_value;
+	@parameter2 = parame2_value;
+
+*/
+
+-- Select all employees from the 'Finance department';
+
+SELECT * FROM hcm.employees;
+
+SELECT
+	e.employee_id, 
+	e.first_name, 
+	e.last_name, 
+	d.department_name 
+FROM hcm.employees AS e
+INNER JOIN hcm.departments AS d
+ON e.department_id = d.department_id
+WHERE d.department_name='Finance';
+
+GO
+
+-- Stored procedure on input parameter::
+CREATE PROCEDURE hcm.getEmployeeByDepartment(@department_name VARCHAR(50))
+AS
+SELECT
+	e.employee_id, 
+	e.first_name, 
+	e.last_name, 
+	d.department_name 
+FROM hcm.employees AS e
+INNER JOIN hcm.departments AS d
+ON e.department_id = d.department_id
+WHERE d.department_name= @department_name;
+
+GO
+
+--Execute hcm.getEmployeeByDepartment  stored procedure to get all employee in the 'Finance' department;
+
+EXECUTE hcm.getEmployeeByDepartment @department_name = 'Finance' ;
+
+--OR
+
+EXECUTE hcm.getEmployeeByDepartment 'Finance';
+
+--OR
+
+EXEC hcm.getEmployeeByDepartment 'Finance';
+
+
+--Execute hcm.getEmployeeByDepartment  stored procedure to get all employee in the 'Sales' department;
+EXEC hcm.getEmployeeByDepartment 'Sales';
