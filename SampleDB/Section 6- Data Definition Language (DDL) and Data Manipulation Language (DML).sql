@@ -651,3 +651,143 @@ EXEC hcm.getEmployeeByDepartment 'Finance';
 
 --Execute hcm.getEmployeeByDepartment  stored procedure to get all employee in the 'Sales' department;
 EXEC hcm.getEmployeeByDepartment 'Sales';
+
+--Select query that select customer who contain the string 34th in their street address
+
+SELECT * FROM oes.customers;
+SELECT 
+	customer_id,
+	first_name,
+	last_name,
+	email,
+	street_address
+FROM oes.customers
+WHERE street_address LIKE '%34th%';
+GO
+
+CREATE PROCEDURE oes.searchCustomersByStreetAdderess 
+(
+	@street_address_search VARCHAR(50)
+)
+AS
+SELECT 
+	customer_id,
+	first_name,
+	last_name,
+	email,
+	street_address
+FROM oes.customers
+WHERE street_address LIKE '%'+@street_address_search+'%';
+GO
+
+EXECUTE oes.searchCustomersByStreetAdderess '34th';
+GO
+
+--Select query that customer from Australia who have gmail email addresses::
+
+SELECT
+	cu.customer_id,
+	cu.first_name,
+	cu.last_name,
+	cu.email,
+	ct.country_name
+FROM oes.customers cu
+INNER JOIN hcm.countries ct
+ON cu.country_id = ct.country_id
+WHERE ct.country_name = 'Australia'
+AND cu.email LIKE '%gmail.com'
+
+GO
+
+CREATE PROCEDURE oes.getCustomerBycountryEmail
+(
+	@country VARCHAR(50),
+	@email_domain VARCHAR(320)
+)
+AS
+BEGIN
+	SELECT
+		cu.customer_id,
+		cu.first_name,
+		cu.last_name,
+		cu.email,
+		ct.country_name
+	FROM oes.customers cu
+	INNER JOIN hcm.countries ct
+	ON cu.country_id = ct.country_id
+	WHERE ct.country_name = @country
+	AND cu.email LIKE '%'+ @email_domain
+END
+GO 
+
+EXECUTE oes.getCustomerBycountryEmail 'Australia', 'gmail.com';
+
+--Select employee who have a salary greater than or equal to 80000 nd less than or equal 100000
+SELECT 
+	employee_id,
+	first_name,
+	last_name,
+	department_id,
+	salary
+FROM hcm.employees
+WHERE salary >= 80000
+AND salary <= 100000
+GO
+
+
+CREATE PROCEDURE hcm.getemployeeBySalaryRange
+(
+	@min_salary DECIMAL (12,2),
+	@max_salary DECIMAL (12,2)
+)
+AS
+SELECT 
+	employee_id,
+	first_name,
+	last_name,
+	department_id,
+	salary
+FROM hcm.employees
+WHERE salary >= @min_salary
+AND salary <= @max_salary
+GO
+
+
+--SELECT employees between default range i.e @min_salary = 0, @max_salary = 9999999999
+EXECUTE  hcm.getemployeeBySalaryRange 80000, 100000;
+
+
+/*
+--Optional parameters::
+We can specify default values for paremeters.  In alter procedure below. @min_salary is set to default value of 0 and @max_salary is set to default 9999999. there fore when you executer the stored procedure you have the option to skip the parameter which have default  parameter.
+
+*/
+
+GO
+ALTER PROCEDURE hcm.getemployeeBySalaryRange 
+(
+	@min_salary DECIMAL (12,2) = 0,
+	@max_salary DECIMAL (12,2) = 99999999
+)
+AS
+SELECT 
+	employee_id,
+	first_name,
+	last_name,
+	department_id,
+	salary
+FROM hcm.employees
+WHERE salary >= @min_salary
+AND salary <= @max_salary
+GO
+
+
+--Select employee with main salary of 90000 and default max salary
+EXECUTE hcm.getemployeeBySalaryRange @min_salary = 90000;
+
+--Select employee with main salary of 90000 and default min salary
+EXECUTE hcm.getemployeeBySalaryRange @max_salary = 150000;
+
+
+
+---
