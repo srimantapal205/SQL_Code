@@ -790,4 +790,92 @@ EXECUTE hcm.getemployeeBySalaryRange @max_salary = 150000;
 
 
 
----
+---OutputParemeters
+SELECT * FROM dbo.parks2;
+
+CREATE PROCEDURE dbo.addNewPark
+(
+	@park_name VARCHAR(50),
+	@entree_free DECIMAL(6,2) = 0,
+	@new_park_id INT OUT
+)
+AS
+-- Setting the NOCOUNT option ON means that SQL server won't show message reporting how many row created.
+SET NOCOUNT ON;
+
+--If XACT_ABORT setting is OFF then not all run-time errors will cause the tranction to rollback.
+-- By setting XACT_ABORT setting ON then all errors will cause the transction to rollback and exeution of the code to abort:
+SET XACT_ABORT ON;
+
+BEGIN
+INSERT INTO dbo.parks2 (park_name, entry_fee)
+	VALUES(@park_name, @entree_free)
+
+--Setting the  @new_park_id output paremeters to the value returnd by the scope_IDENTITY 
+--SOCPE_IDENTITY() return the IDENTITY value of the last insert thar occurred in the same 
+
+SELECT @new_park_id = SCOPE_IDENTITY();
+
+END
+GO
+
+
+/*
+To execute a stored procedure with an output parameter(s) we must declear a varible to store the value returned by the output parameter ::
+*/
+
+-- Declear a varible called @parkID of data type INT.
+--This will store the value returnd by the  'Green meadows ' park.
+DECLARE @ParkID INT;
+--Execute the stored procedure to add the 'Green Meadows' park.
+EXEC dbo.addNewPark @park_name = 'Green Meadows-3', @entree_free= 5.8, @new_park_id = @ParkID OUT;
+SELECT @ParkID
+GO
+SELECT * FROM dbo.parks2;
+
+/*
+Notes::
+We set the output paremeter (@new_park_id ) to the varible (@parkID).
+Importentlyy, we need to include the keyword out or output after any output paremeter. If we need to include the keyword out or output paremeter in the execute statement the varible will not recive the value from the output paremeter.
+
+*/
+
+
+/*
+Challenge 1:: Create a stored procedure called oes.getQuantityOnHand that returns the quantity_on_hand in the oes.inventories table for a
+given product_id and warehouse_id Execute the stored procedure to return the quantity on hand of product id 4 at warehouse id 2.
+*/
+SELECT * FROM oes.inventories;
+
+CREATE PROCEDURE oes.getQuantityOnHand 
+(
+	@product_id INT,
+	@warehouse_id INT
+)
+AS
+BEGIN 
+-- How much quentity on hand is there for product_id X at wherehouse Y?
+SELECT 
+	quantity_on_hand
+FROM oes.inventories
+WHERE 
+	product_id = @product_id AND warehouse_id = @warehouse_id;
+
+END
+GO
+
+EXEC oes.getQuantityOnHand 4 , 1;
+
+/*
+Challenge 2 :: Create a stored procedure called oes.getCurrentProducts that returns current products ( discontinued = 0 ) in the oes.products table. In addition, define two input parameters: 
+- A parameter called @product_name of data type VARCHAR ( 100). Allow users to wildcard search on the product_name 
+- A parameter called @max_list_price of data type DECIMAL ( 19,4). Allow users to only include current products that have a list_price that is less than or equal to a specified value for this parameter. Execute the stored procedure to return current products that contain the word ‘Drone’ and have a maximum price of $700.
+*/
+
+/*
+
+Challenge 3:: Create a stored procedure called oes.transferFunds that transfers money from one bank account to another bank account by updating the balance column in the oes.bank_accounts table. Also, insert the bank transaction details into oes.bank_transactions table. Define three inputparameters:
+-@withdraw_account_id of data type INT
+-@deposit_account_id of data type INT
+-@transfer_amount of data type DECIMAL (Test the stored procedure by transferring $100 from Anna’s bank account to Bob’s account. 
+*/
