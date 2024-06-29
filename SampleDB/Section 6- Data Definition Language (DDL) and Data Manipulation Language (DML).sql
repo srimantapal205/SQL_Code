@@ -872,6 +872,29 @@ Challenge 2 :: Create a stored procedure called oes.getCurrentProducts that retu
 - A parameter called @max_list_price of data type DECIMAL ( 19,4). Allow users to only include current products that have a list_price that is less than or equal to a specified value for this parameter. Execute the stored procedure to return current products that contain the word ‘Drone’ and have a maximum price of $700.
 */
 
+CREATE PROCEDURE oes.getCurrentProducts 
+(
+	@product_name  VARCHAR ( 100),
+	@max_list_price  DECIMAL ( 19,4)
+)
+AS
+BEGIN
+
+SELECT 
+	product_id,
+	product_name,
+	list_price
+
+FROM oes.products
+WHERE discontinued = 0
+AND product_name  LIKE '%' + @product_name  + '%'
+AND list_price <= @max_list_price;
+
+END
+GO
+
+EXEC oes.getCurrentProducts 'Drone' , 700;
+
 /*
 
 Challenge 3:: Create a stored procedure called oes.transferFunds that transfers money from one bank account to another bank account by updating the balance column in the oes.bank_accounts table. Also, insert the bank transaction details into oes.bank_transactions table. Define three inputparameters:
@@ -879,3 +902,79 @@ Challenge 3:: Create a stored procedure called oes.transferFunds that transfers 
 -@deposit_account_id of data type INT
 -@transfer_amount of data type DECIMAL (Test the stored procedure by transferring $100 from Anna’s bank account to Bob’s account. 
 */
+
+CREATE TABLE oes.bank_accounts 
+(
+	account_id INT IDENTITY,
+	account_name VARCHAR(50) NOT NULL,
+	balance DECIMAL(30,2),
+CONSTRAINT pk_bank_accounts_account_id PRIMARY KEY (account_id),
+CONSTRAINT chk_bank_accounts_balance CHECK (balance >= 0)
+);
+
+
+INSERT INTO oes.bank_accounts (account_name, balance) VALUES ('Anna', 3400);
+INSERT INTO oes.bank_accounts (account_name, balance) VALUES ('Bob', 2400);
+INSERT INTO oes.bank_accounts (account_name, balance) VALUES ('Sandra', 2800);
+INSERT INTO oes.bank_accounts (account_name, balance) VALUES ('Abdul', 3200);
+
+
+
+
+CREATE TABLE oes.bank_transactions
+(
+	tr_id INT IDENTITY,
+	tr_datetime datetime2 DEFAULT GETDATE(),
+	from_account_id INT,
+	to_account_id INT,
+	amount DECIMAL(30,2),
+CONSTRAINT pk_transactions_transaction_id PRIMARY KEY (tr_id),
+CONSTRAINT fk_transactions_from_account_id FOREIGN KEY (from_account_id)
+	REFERENCES oes.bank_accounts(account_id),
+CONSTRAINT fk_transactions_to_account_id FOREIGN KEY (to_account_id)
+	REFERENCES oes.bank_accounts(account_id)
+);
+
+
+
+INSERT INTO oes.bank_transactions (from_account_id, to_account_id, amount) VALUES (4, 3, 150);
+INSERT INTO oes.bank_transactions (from_account_id, to_account_id, amount) VALUES (1, 4, 92.5); 
+
+SELECT * FROM oes.bank_accounts;
+SELECT * FROM oes.bank_transactions;
+
+CREATE PROCEDURE oes.transferFunds
+(
+	@withdraw_account_id  INT,
+	@deposit_account_id  INT,
+	@transfer_amount DECIMAL (30,2)
+)
+AS
+--Setting the acount option to ON means tht SQL Server won't show message repoting How 
+
+SET XACT_ABORT ON;
+
+BEGIN
+BEGIN TRANSACTION;
+
+UPDATE oes.bank_accounts 
+SET balance = balance - @transfer_amount
+WHERE account_id = @withdraw_account_id;
+
+UPDATE oes.bank_accounts 
+SET balance = balance + @transfer_amount
+WHERE account_id = @deposit_account_id;
+
+INSERT INTO oes.bank_transactions (from_account_id, to_account_id, amount)
+VALUES (@withdraw_account_id, @deposit_account_id, @transfer_amount);
+
+COMMIT TRANSACTION;
+
+END
+GO
+
+EXEC oes.transferFunds 1,2,100.12;
+
+
+SELECT * FROM oes.bank_accounts;
+GO
