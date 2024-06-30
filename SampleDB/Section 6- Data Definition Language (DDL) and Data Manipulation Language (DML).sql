@@ -978,3 +978,80 @@ EXEC oes.transferFunds 1,2,100.12;
 
 SELECT * FROM oes.bank_accounts;
 GO
+
+
+
+/*
+ALTER table statement 
+The ALTER TABLE statement can be used to add modify or drop column in an exiting table.
+Note:: 
+In SQL we used the term 'drop' when we delete an object such as a table, column etc wheres, we use the term delete when deleting a row.
+
+Syntax::
+ALTER TABLE table_name
+ADD column_name column _data_type
+
+Example::
+ALTER dbo.products ADD product_code INT;
+
+Note::
+When we add a column to a table it always get added to the end of the table.
+
+For multiple column::
+ALTER TABLE table_name
+ADD column1 column1_data_type,
+	column2 column2_data_type;
+
+Example::
+ALTER TABLE dbo.products
+ADD product_code INT,
+	date_added DATETIME2,
+	notes VARCHAR(100)
+
+
+Modify an exiting column::
+Syntax::
+ALTER TABLE table_name
+ALTER COLUMN column_name column_data_type;
+
+Example::
+ALTER TABLE dbo.products
+ALTER COLUMN product_name VARCHAR(50) NOT NULL;
+
+
+DROP a column in a table
+SYNTAX:
+ALTER TABLE table_name
+DROP COLUMN column_name;
+
+EXAMPLE::
+ALTER TABLE dbo.products DROP COLUMN color:
+
+In this example, the column call ed 'color' - as well as all the data in this column - is permantly removed from the database table.
+
+
+Eename a column in table::
+Syntax::
+sp_rename 'schema_name.table_name.old_column_name', 'new_column_name', 'COLUMN';
+
+EXAMPLE::
+sp_rename 'dbo.prducts.product_name', 'prod_name' 'COLUMN';
+
+NOTE::
+Beware that changing a column name can breake script, stored procedure and views that are still referancing the old column name.
+
+sp_rename can alsobe used to rename other type of object. however, it is not recommended to use sp_rename for some type of objects. such as stored procedure and views. this is beacuse there are some metadata system views which store the object code and these will not be updated.
+
+*/
+
+/*
+Challenge-1:: Add a new column called ‘termination_date ’ onto the hcm.employees table. Give this new column a data type of DATE
+*/
+
+/*
+Challenge-2:: Write two SQL statements to change the data type of the first_name and last_name columns to NVARCHAR(60) in the oes.customers table.
+*/
+
+/*
+Challenge-3:: Use sp_rename to rename the column name 'phone' to main_phone ' in the oes.customers table. Note that this challenge does not use an ALTER TABLE statement.
+*/
