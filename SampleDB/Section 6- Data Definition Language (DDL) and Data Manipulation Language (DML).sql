@@ -1069,3 +1069,58 @@ Challenge-3:: Use sp_rename to rename the column name 'phone' to main_phone ' in
 sp_rename 'oes.customers.phone', 'main_phone', 'COLUMN';
 
 SELECT * FROM oes.customers;
+
+/*
+The UNIQUE constaint 
+
+The UNIQUE constrint is type of integrity constraint.
+A UNIQUE constraint ensure that the column specified in the constraint cn only have unique values.
+If multiple column are specified in the constraint then only unique combinations of the column values are allowed.
+The UNIQUE constraint is similar to a PRIMARY KEY constraint. However there are some important diffrences.
+
+PRIMARY KEY vs. UNIQUE constraint
+
+PRIMARY KEY Constraint:: 
+A single table can only have one primary key constraint.
+A primary key ensures that values are both unique and NOT NULL.
+A primary ke automatically create an associated unique index.
+
+UNIQUE constraint::
+A single table can have multiple unique constraint.
+A unique constraint ensure values are unique but does allow a null.
+A unique constraint autometically cretes an associated unique index.
+
+SYNTAX::
+ALTER TABLE table_name
+ADD CONSTRAINT constraint_name UNIQUE (COLUMN_name);
+
+Example::
+ALTER TABLE dbo.products
+ADD CONSTRAINT uk_products_product_name UNIQUE (product_name);
+*/
+/*
+Challenge-1:: Use an ALTER TABLE statement to add a  UNIQUE constraint to the department_name column in the hcm.departments 
+*/
+SELECT * FROM hcm.departments;
+
+--Query information schema views to get metadata on contraint on hecm.department table::
+SELECT 
+	tc.TABLE_SCHEMA,
+	tc.TABLE_NAME,
+	tc.CONSTRAINT_TYPE,
+	CCU.COLUMN_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
+ON tc.CONSTRAINT_NAME = ccu.CONSTRAINT_NAME
+AND tc.TABLE_NAME = ccu.TABLE_NAME
+AND tc.TABLE_SCHEMA = ccu.TABLE_SCHEMA
+WHERE tc.TABLE_SCHEMA = 'hcm' AND tc.TABLE_NAME = 'departments';
+
+SELECT COUNT(*), COUNT(DISTINCT department_name) FROM hcm.departments;
+
+
+ALTER TABLE  hcm.departments 
+ADD CONSTRAINT uk_departments_department_name UNIQUE (department_name);
+
+
+
