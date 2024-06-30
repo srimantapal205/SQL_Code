@@ -1047,11 +1047,25 @@ sp_rename can alsobe used to rename other type of object. however, it is not rec
 /*
 Challenge-1:: Add a new column called ‘termination_date ’ onto the hcm.employees table. Give this new column a data type of DATE
 */
+ALTER TABLE hcm.employees
+ADD termination_date DATE;
+
+SELECT * FROM hcm.employees
 
 /*
 Challenge-2:: Write two SQL statements to change the data type of the first_name and last_name columns to NVARCHAR(60) in the oes.customers table.
 */
 
+ALTER TABLE oes.customers
+	ALTER COLUMN first_name NVARCHAR(60) NOT NULL;
+ALTER TABLE oes.customers
+	ALTER COLUMN last_name NVARCHAR(60) NOT NULL; 
+
+
 /*
 Challenge-3:: Use sp_rename to rename the column name 'phone' to main_phone ' in the oes.customers table. Note that this challenge does not use an ALTER TABLE statement.
 */
+
+sp_rename 'oes.customers.phone', 'main_phone', 'COLUMN';
+
+SELECT * FROM oes.customers;
