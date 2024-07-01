@@ -1124,3 +1124,35 @@ ADD CONSTRAINT uk_departments_department_name UNIQUE (department_name);
 
 
 
+/*
+CHECK Constraints::
+A CHECK constraint is a type of integrity constraint.
+A CHECK constraint can be applied to column and check tht each value in the column meets a certain condition.
+A CHECK constraint cannot refer to a column from another table.
+A check constraint cannot contain a subquery.
+
+SYNTAX::
+ALTER TABLE table_name
+ADD CONSTRAINT constraint_name CHECK (column_name condition);
+
+Example::
+ALTER TABLE dbo.order_details
+ADD CONSTRAINT check_order_details_quantity CHECK (quentity > 0);
+
+THIS CHECK constraint ensure that the column called quentity will always have a value greater than zero.
+Example::
+ALTER TABLE dbo.products
+ADD CONSTRAINT check_product_color
+CHECK(COLOR IN ('Red', 'Blue', 'Yellow', 'Black','White'));
+
+
+*/
+
+/*
+Challange::
+Use an ALTER TABLE statement to add a CHECK constraint on the salary column in the hcm.employees table to ensure that salary is greater than or equal to zero.
+*/
+SELECT * FROM  hcm.employees;
+ALTER TABLE hcm.employees 
+ADD CONSTRAINT check_employees_salary CHECK(salary >= 0);
+
