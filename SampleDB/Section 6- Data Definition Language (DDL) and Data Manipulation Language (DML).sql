@@ -1213,7 +1213,40 @@ If the column had an even distribution  i.e 50% of the rows have a value of 'Yes
 SQL would need to access the index 5000 times to find one of the two possible values
 Accessing the index takes time and in this case the query optimizer will likely determine it faster to simply do a full table scan and therefore no use index. 
 
+Index Type::
+Non-Clusterd Indexs:
+A non-clustered index is regular b+ tree index.
+A nopn-clusterd index is stored at diffrent place to the table data.
+The non-clusterd index contains pointers to the location of data.
+This allows for multiple non-clusterd indexes on a single table 
+
+Syntax:
+CREATE NONCLUSTERD INDEX index_name
+ON able_name (column1_name, column2_name,...)
+
+Example::
+CREATEX index ix_account_name ON dbo.accounts(account_name);
+
+Clusterd Indexes::
+A clusterd index is an index which physically sorts the table data accroding to the indeed column(s)
+Table data can be stored in only one way. Therefore, we can only create one clusterd index per table.
+By default, a primary key constraint will also create a clusterd index on the primary key column.
+For example:
+ALTER TABLE dbo.accounts ADD CONSTRAINT px_account_acount_id PRIMARY KEY CLUSTERED (acount_id);
+
+If requried, it is possible to create a clustred index by itself on a column that is not the primary key. 
+FOR example::
+CREATE CLUSTERD INDEX  ix_employee_login_id ON dbo.employees(login_id);
+
+Primary Key vs. Cluster Index::
+A primary ke constraint is logical concept:
+	A primary  key constraint ensure that the key column(s) can be used to uniquely identify each row in table.
+
+A cluster index is phycal concept:
+	A cluster index defines the order that the row in a table are stored on disk. It does this based on the column specified in the clusterd index.
+	A clusterd index can even be applied to a column that does not have unique values.
+	
+	However it generally recommended to apply the clusterd inddex index on a column that has unique values.
 
 
-
-*/
+	
