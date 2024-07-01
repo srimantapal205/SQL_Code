@@ -1156,3 +1156,64 @@ SELECT * FROM  hcm.employees;
 ALTER TABLE hcm.employees 
 ADD CONSTRAINT check_employees_salary CHECK(salary >= 0);
 
+/*
+Introduction to Indexs::
+An index is a data structure which can speed up search on a table if properly implemented. 
+An index can be applied to one or more columns in table.
+Indexes are a separate date structure to the table on which they are applied.
+Indexs take up applied.
+An index can slow down insert update and delete statement because the index also need to be updated.
+
+
+Book Index Analogy::
+An index in a database can be likend to an index in a book.
+A book index helps you to quickly find what page to find some topic.
+A book index copies a small piece of information( i.e. a topic ) and then order it alphabetically.
+Each topic has a reference to one or more page numbers in the book.
+An index in a database referances locations in table, rather than page in a book.
+
+Terminology::
+Heap:
+A heap is  a table that doesnot have a clustered index on it.
+
+Table Scan::
+A table scan is where the SQL engine reads all the rows and columns.
+
+Index Scan:
+An index scan is where the SQL engine reads all the rows (or index pages) and only the columns in the indx.
+
+Index seek:
+An index seek uses the index to pinpoint only the rows thar are needed to satisfy the query.
+
+Cardinility::
+Cardinality refers to the number of unique value in an column.
+
+Selectivity::
+Selectivity is a measure of how much an index can help to narrow the search for specific values in table. there are to ways it can be expressed:
+	Average Selectivity:  Average Selectivity is the cadinality divided by the total number of rows in table.
+	Selectivity of a specific value: It is the number of rows for a specific value divided by the total number of rows in a table.
+Example::
+
+SELECT 
+	COUNT(DISTINCT(order_status)) AS cardinality FROM db.orders;
+
+SELECT
+	(COUNT(DISTINCT(order_status)) * 1.0 / COUNT(*)) AS avg_selectivity FROM dbo.orders;
+
+SELECT
+	(SELECT COUNT(*) FROM orders WHERE order_status = 'Closed') * 1.0/COUNT(*) AS selectivity_fro_value_closed
+FROM orders;
+
+
+Implications of selectivity::
+When average selectivity is low for a column then it is often best not to index that column.
+
+For example, imagine a column with to possibe values 'Yes' or 'No' and there are 10,000 rows in the table, then the selectivity would be only 0.0002
+If the column had an even distribution  i.e 50% of the rows have a value of 'Yes' and 50% of 'No', then this means...
+SQL would need to access the index 5000 times to find one of the two possible values
+Accessing the index takes time and in this case the query optimizer will likely determine it faster to simply do a full table scan and therefore no use index. 
+
+
+
+
+*/
