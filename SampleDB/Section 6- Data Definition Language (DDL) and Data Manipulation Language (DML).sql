@@ -1244,9 +1244,57 @@ A primary ke constraint is logical concept:
 
 A cluster index is phycal concept:
 	A cluster index defines the order that the row in a table are stored on disk. It does this based on the column specified in the clusterd index.
-	A clusterd index can even be applied to a column that does not have unique values.
-	
+	A clusterd index can even be applied to a column that does not have unique values.	
 	However it generally recommended to apply the clusterd inddex index on a column that has unique values.
 
+	The Primary key column do not necessarly have to be same as cluterd index column(s).
 
-	
+
+Should Primary Key always have a clusterd index?
+A primary ke automatically creates a clusterd index if there is no other exiting clusterd index on the table.
+In most situation, it is best to just leave it on the default, and have the primary key create an associated clustered index.
+There are some situations where we might put a clustered index on a diffrent column to the primary key:
+	If there is some alternate key that is more frequently used in queries.
+	The primary key has a large key width. This is more frequently used in queryes.
+	The primary key has a large key width. This is because the clusterd key values get replicated in very one of the non-clusterd indexes on the same table.
+
+Unique Indexes
+A unique index ensure that a column can only contain unique values.
+By default in SQL server..
+	When either a unique constraint or primary key constraint is created, then a corresponding unique index also created.
+	A unique constraint will automatically create a corresponding clustered index.
+	A primary key constraint will automatically create a corresponding clusterd index.
+A unique index can also be created by itself.
+
+Syntax:
+CREATE UNIQUE INDEX index_name
+	ON table_name (column1, column2,....)
+
+
+Filterd Indexs
+A filtered index is a type of non-clusterindex where only some of the rows are index based on some condition.
+Because only a portion of the rows are indexed this can save on space and improve query performance.
+Filterd indexes are usefull on column that have a lot of nulls
+Filterd index are also useful if you often query for a value that makes up a small proportion of the total rows in table.
+
+Syntax::
+CREATE INDEX index_name
+	On table(columnName, column2)
+Where condition
+
+CREATE INDEX ix_employee_termination_date
+	ON hcm.employees (termination_date)
+WHERE TERMINATION_DATE is null
+
+
+General Indexing Guidelines::
+Avoid over-indexing heavily update tamle.
+Keep indexes  narrow it with as few column as is rquried.
+You can create many indexes on table that is seldom update.
+Indexing small tables that are likely to stay small is often not necessary to do.
+Consider indexingforigen key columns.
+Consider filtering index to help optimize queries that return a well-defined subset of rows from a large table.
+
+Clusterd Index Guidelines::
+With few exceptions, it is best to put a cluster index on everytable.
+Ideally the clusterd index should be on a column that is unique, non-null, narrow in size, and are typically accessed sequentially.
