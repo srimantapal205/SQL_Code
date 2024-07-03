@@ -1298,3 +1298,111 @@ Consider filtering index to help optimize queries that return a well-defined sub
 Clusterd Index Guidelines::
 With few exceptions, it is best to put a cluster index on everytable.
 Ideally the clusterd index should be on a column that is unique, non-null, narrow in size, and are typically accessed sequentially.
+
+Composite Indexes
+A composite index is where multiple column are specified for the index key.
+Example:
+Create Index ix_customer_last_first_name ON customers (first_name, last_name);
+A query can only use a composit index-to do an index seek-if the WHERE clause of the query har at least the leftmost column.
+
+In a composit index, it is usally best to choos he column that has higher degree of uniqueeness, i.e higher selectivity. as the leftmost column.
+
+Example::
+
+--Composite non clusterd index:
+CREate INDEX ix_customer_left_first_name ON customers (first_name, last-name);
+
+SELECT customer_id, first_name, last_name
+FROM customers
+WHERE first_name = 'Alisha' AND last_name = 'Jones';
+
+Fro this query, the query optimizer can use the composite index to do an index seek.
+
+
+SELECT customer_id, first_name, last_name
+FROM customers
+WHERE first_name = 'Alisha';
+
+For this query the query optimizer can use the composite index to do an index seek because we are still filtering on the leading/left most column i.e last_name.
+
+SELECT customer_id, first_name, last_name FROM customers WHERE last_name = 'Jones';
+
+For this query the query optimizer cannot use the composit index to do an index seek because the leading column(first_name) has not been specified in the where clause.
+
+SELECT customer_id, first_name, last_name, city
+FROM customers 
+WHERE first_name = 'Alisha' AND last_name = 'Jones';
+
+The query cannot do an index seek on the non -cluster index because the 'city' column is not included in the index.
+
+Composit non clusterd index with an include column:
+
+CREATE INDEX ix_customer_last_first_name_incl_city
+ON oes.customers(first_name, last_name, city) INCLUDE (city)
+
+SELECT customer_id, first_name, last_name, city
+FROM customers
+WHERE last_name = 'Jones' AND first_name = 'Alisha'
+For this the query optimizer can do an index seek.
+This is becaue we have included 'city' as an additional column in the index.
+
+Indexes with Include columns
+The INCLUDE clause allow us to include non-key column in a non cluster index.
+This can be useful for query that stored at all levels of the index stricturee.
+Whereas non-key column are stored only at the leaf level.
+This  means that specifying a column as an include column - rather than as part of thr indexkey - will have a lower storage cost.
+Include column can also be data type that are allow as index column. for example xml, and nvarchar(max) data type
+
+Syntax:
+CREATE NONCLUSTERED INDEX index-name ON table_name(col1, col2...)
+INCLUDE(Col3, col4....)
+----------------------------------------------
+Sargable Queries
+A query is said to be sargable if the SQL engine can take full advantage of an index to make a query execute faster.
+The word sargable is a connection of three word:
+Search, Argument, and Able.
+A search argumwnt is filter condition that enable the query optimizer to use index order.
+
+A condition in the WHERE clause is sargable id:
+No manupulation is applied to the column that is beging filterd on.
+Or...
+The comparison operator identifires a conseective range of rows that are indexed this. This is true for operators such as =, >, >=, <,<=,BETWEEN, LIKE without a leading % sign wildcard.
+Select all sales persion with starting with A:
+Example::
+
+SELECT first_name, last_name FROM dbo.salespeople WHERE LEFT(first_name,1) = 'A';
+THis query is not sargable because we have manipulated the first_name column by applying the LEFT function to it.
+
+
+SELECT person_id, first_name
+FROM dbo.salespeople EHERE first_name LIKE 'A%';
+This query is sargable because the condition in the WHERE clause can successfully identify a consecutive range of indexed row i.e. the ones starting with the letter 'A'.
+
+Select all sales persion with starting with 'a':
+SELECT person_id, first_name
+FROM dbo.salespeople EHERE first_name LIKE '%a';
+This query is not sargable because the condition in the WHERE clause cannot successfully identify a consecutive range of index row  i.e the ones ending in the letter 'a'
+SELECT all salepeople who were hired in 2020
+
+SELECT person_id, first_name, hire_date 
+FROM dbo.salespeople WHERE YEAR(hire_date) = 2020;
+
+This query is not sargable because we have applied manipulate to the  'hire_date' column by putting YEAR function.
+
+
+SELECT persion_id, hire_date FROM dbo.salespeople WHERE hire_date>= '20200101' AND hire_date < '20210101';
+
+
+This query is sargable because the condition isn the WHERE clause can successfully identify consecitive range of indexed row i.e. the hire dates within the specified range.
+
+Select all sales people who have a commision which is lessthan 0.15(15%).
+Replaces nulls with zeros.
+
+SELECT persion_id, commision FROM dbo.salespeople WHERE COALESCE(commission, 0)<0.15;
+This query is not sargable because we are applying the COALESCE function to the column being filterd on i.e. the 'commission' column.
+
+SELECT persion_id, commission FROM dbo.salespeople WHERE commission <0.15 or commission IS NULL;
+This query is sargable because we are no longer applying a function to 'commission' column.
+
+
+
