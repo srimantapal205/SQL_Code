@@ -1405,4 +1405,43 @@ SELECT persion_id, commission FROM dbo.salespeople WHERE commission <0.15 or com
 This query is sargable because we are no longer applying a function to 'commission' column.
 
 
+*/
+/*
+Challenge-1:
+Create a non clustered index on the location_id column in the oes.warehouses table. Also, specify warehouse_name as a non key included column.
+*/
+CREATE NONCLUSTERED INDEX ix_warehousees_location_id_inclu_warehoues_name 
+ON oes.warehouses(location_id) INCLUDE (warehouse_name);
+/*
+Challenge-2:
+Create a UNIQUE index on the product_name column in the oes.products table.
+*/
+CREATE UNIQUE INDEX ux_products_product_name ON  oes.products (product_name); 
 
+/*
+Challenge-3:
+Rewrite the following query to make it sargable: 
+SELECT order_id, order_date
+FROM  oes orders
+WHERE YEAR order_date 2019
+*/
+SELECT order_id, order_date FROM  oes.orders WHERE  order_date>= '20200101' AND order_date < '20210101';
+
+/*
+Challenge-4:
+Most queries against the oes.orders table are for unshipped orders i.e. orders where the shipped_date is null. Put an appropriate filtered index on the
+*/
+CREATE NONCLUSTERED INDEX fix_order_shipped_date_nulls ON oes.orders (shipped_date)
+WHERE shipped_date IS NULL;
+
+/*
+Challenge-5:
+Rewrite the following query to make it sargable and create an index which covers the query, once rewritten:
+SELECT customer_id, first_name last_name email street_address
+FROM oes customers
+WHERE LEFT( first_name 2 ))=='
+AND last_name = 'Jones';
+*/
+
+SELECT customer_id, first_name, email, street_address FROM oes.customers FROM oes.customers
+WHERE first,  
