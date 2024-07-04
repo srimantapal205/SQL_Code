@@ -1443,5 +1443,8 @@ WHERE LEFT( first_name 2 ))=='
 AND last_name = 'Jones';
 */
 
-SELECT customer_id, first_name, email, street_address FROM oes.customers FROM oes.customers
-WHERE first,  
+SELECT customer_id, first_name, email, street_address FROM oes.customers 
+WHERE first_name LIKE 'Vi%' AND last_name ='Jones';
+
+CREATE NONCLUSTERED INDEX ix_first_name_last_name_incl_email_street_address
+	ON oes.customers(first_name,last_name) INCLUDE (email, street_address);
