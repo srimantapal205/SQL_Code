@@ -1448,3 +1448,43 @@ WHERE first_name LIKE 'Vi%' AND last_name ='Jones';
 
 CREATE NONCLUSTERED INDEX ix_first_name_last_name_incl_email_street_address
 	ON oes.customers(first_name,last_name) INCLUDE (email, street_address);
+
+/*
+Views::
+
+A views is a virtual table whose data is define by a query.
+Basic Syntax:
+CREATE VIEW name_of_view AS
+SELECT col1, col2
+FROM table_name;
+
+
+CREATE VIEW employee_info AS
+SELECT employee_id,
+first_name,
+last_name
+FROM employees;
+
+SELECT * FROM employee_info;
+
+
+Like a table , a view consists of named column and row of data.
+Unlike a table , a view has no physical represettion:
+	Data in a view is not stored on dis. instead a view typically queries base table.
+A view fetchs data from underlying tables when we query the view.
+
+View Characteristics:
+Every column in a view must have a name.
+ORDER BY cannot be used in a view unless TOP is also specified.
+	Note:
+		Do not use SELECT TOP 100 PERCENT... ORDER BY... as a workaround. This will not guarantee the ordering of row in a view!
+
+You can modify base table data through a simple view.
+
+Uses::
+Views can be used to provide security(i.e limit access)
+	Users can have access to views that select only a subset of column from a table.
+Views can be used to simplify a data model
+	e.g You could have a view which has a comples select statement which joins multiple tables and/or aggregates data Users can then create query the custom- made view to simplifi reporting queries.
+ 
+*/
