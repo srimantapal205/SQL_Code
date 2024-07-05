@@ -95,3 +95,19 @@ SELECT * FROM [dbo].[departments];
 
 --1. Select employees first name, last name, job_id and salary whose first name starts with alphabet S
 SELECT employee_id, first_name, last_name, job_id FROM [dbo].[employees] WHERE UPPER(first_name) LIKE 'S%';
+
+--2. Write a query to select employee with the highest salary.
+SELECT employee_id, first_name,last_name, salary FROM dbo.employees WHERE salary = (SELECT MAX(salary) FROM employees);
+
+--3. Select employee with the second highest salary.
+SELECT TOP 1 employee_id, first_name,last_name, salary 
+FROM dbo.employees 
+WHERE salary != (SELECT MAX(salary) FROM employees) 
+ORDER BY salary DESC; 
+
+--4. Fetch employees with 2nd or 3rd highest salary
+DECLARE @input INT;
+SET @input = 4;
+SELECT e.employee_id, e.first_name, e.last_name, e.job_id, e.salary  FROM employees AS e
+WHERE @input = (SELECT COUNT(DISTINCT salary) FROM employees p WHERE e.salary <= p.salary);
+
