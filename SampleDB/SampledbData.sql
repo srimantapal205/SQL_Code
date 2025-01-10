@@ -1,5 +1,8 @@
+-- Create a new schema
+CREATE SCHEMA Sales AUTHORIZATION dbo;
+GO
 -- Create the Customer Table
-CREATE TABLE Customer (
+CREATE TABLE Sales.Customer (
     CustomerID INT PRIMARY KEY IDENTITY(1,1),
     FirstName NVARCHAR(50),
     LastName NVARCHAR(50),
@@ -13,7 +16,7 @@ CREATE TABLE Customer (
 );
 
 -- Create the Product Table
-CREATE TABLE Product (
+CREATE TABLE Sales.Product (
     ProductID INT PRIMARY KEY IDENTITY(1,1),
     ProductName NVARCHAR(100),
     Category NVARCHAR(50),
@@ -23,7 +26,7 @@ CREATE TABLE Product (
 );
 
 -- Create the Transactions Table
-CREATE TABLE Transactions (
+CREATE TABLE Sales.Transactions (
     TransactionID INT PRIMARY KEY IDENTITY(1,1),
     CustomerID INT FOREIGN KEY REFERENCES Customer(CustomerID),
     ProductID INT FOREIGN KEY REFERENCES Product(ProductID),
@@ -34,7 +37,7 @@ CREATE TABLE Transactions (
 
 -- Insert Sample Data into Customer Table
 -- Insert 50 Sample Data into Customer Table
-INSERT INTO Customer (FirstName, LastName, Email, Phone, Address, City, State, ZipCode)
+INSERT INTO Sales.Customer (FirstName, LastName, Email, Phone, Address, City, State, ZipCode)
 VALUES 
 ('John', 'Doe', 'john.doe@example.com', '1234567890', '123 Elm Street', 'Springfield', 'IL', '62701'),
 ('Jane', 'Smith', 'jane.smith@example.com', '9876543210', '456 Oak Street', 'Chicago', 'IL', '60601'),
@@ -76,7 +79,7 @@ VALUES
 
 
 -- Insert 50 Sample Products into the Product Table
-INSERT INTO Product (ProductName, Category, Price, Stock)
+INSERT INTO Sales.Product (ProductName, Category, Price, Stock)
 VALUES
 ('Laptop', 'Electronics', 1200.00, 50),
 ('Smartphone', 'Electronics', 800.00, 100),
@@ -130,7 +133,7 @@ VALUES
 ('Drone', 'Electronics', 1200.00, 15);
 
 -- Verify Products
-SELECT * FROM Product;
+SELECT * FROM Sales.Product;
 
 -- INSERT INTO Product (ProductName, Category, Price, Stock)
 -- VALUES 
@@ -167,7 +170,7 @@ BEGIN
     SELECT @Quantity = FLOOR(RAND(CHECKSUM(NEWID())) * 10 + 1);
 
     -- Insert Transaction
-    INSERT INTO Transactions (CustomerID, ProductID, Quantity)
+    INSERT INTO Sales.Transactions (CustomerID, ProductID, Quantity)
     VALUES (@CustomerID, @ProductID, @Quantity);
 
     -- Increment Counter
@@ -175,10 +178,10 @@ BEGIN
 END;
 
 -- Verify Transactions
-SELECT * FROM Transactions;
+SELECT * FROM Sales.Transactions;
 
 
 -- Query to Verify Data
-SELECT * FROM Customer;
-SELECT * FROM Product;
-SELECT * FROM Transactions;
+SELECT * FROM Sales.Customer;
+SELECT * FROM Sales.Product;
+SELECT * FROM Sales.Transactions;
