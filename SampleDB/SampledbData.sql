@@ -185,3 +185,28 @@ SELECT * FROM Sales.Transactions;
 SELECT * FROM Sales.Customer;
 SELECT * FROM Sales.Product;
 SELECT * FROM Sales.Transactions;
+
+
+
+USE MASTER
+GO
+
+IF DB_ID(N'MARKETPLACEDB') IS NOT NULL  DROP DATABASE MARKETPLACEDB;
+
+IF @@ERROR = 3702
+	RAISERROR(N'Data can not be dropped because there ae still open connection', 127,127) WITH NOWAIT, LOG
+
+--CREATE DataBase
+CREATE  DATABASE MARKETPLACEDB;
+
+USE MARKETPLACEDB;
+GO
+
+-- CREATE SCHEMA
+CREATE SCHEMA Sales AUTHORIZATION dbo
+GO
+
+CREATE TABLE  Sales.Customer(
+	CustomerID INT NOT NULL IDENTITY(1,1)
+
+);
